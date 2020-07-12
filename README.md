@@ -69,7 +69,7 @@ This project is divided in the following key sections:
 ### Installation
 Clone the repo:
 ```
-git clone ## add link
+git clone 
 ```
 <a name="execution"></a>
 ### Executing Program:
@@ -99,31 +99,3 @@ git clone ## add link
 
 * [Udacity](https://www.udacity.com/) as hosts of the Data Science Nanodegree Program
 * [Appen](https://appen.com/) for providing the relevant dataset
-
-<a name="examples"></a>
-## Examples of use
-
-1. This is an example of a message we can type to test the performance of the model
-
-![Sample Input](screenshots/sample_input.png)
-
-2. After clicking **Classify Message**, we can see the categories which the message belongs to highlighted in green
-
-![Sample Output](screenshots/sample_output.png)
-
-3. The main page shows some graphs about training dataset, provided by Figure Eight
-
-![Main Page](screenshots/main_page.png)
-
-4. Sample run of process_data.py
-
-![Process Data](screenshots/process_data.png)
-
-5. Sample run of train_classifier.py
-
-![Train Classifier without Category Level Precision Recall](screenshots/train_classifier.png)
-
-6. Sample run of train_classifier.py with precision, recall etc. for each category
-
-![Train Classifier with Category Level Precision Recall](screenshots/train_classifier_category_precision_recall.png)
-
