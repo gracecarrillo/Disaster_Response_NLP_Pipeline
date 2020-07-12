@@ -1,11 +1,9 @@
 # Disaster Response Pipeline Project
 
-![Intro Pic](screenshots/intro.png)
-
 
 ## Table of Contents
 1. [Description](#description)
-2. [Files][#Files]
+2. [Files](#Files)
 3. [Getting Started](#getting_started)
 	1. [Dependencies](#dependencies)
 	2. [Installation](#installation)
@@ -13,7 +11,6 @@
 4. [Author](#author)
 3. [License](#license)
 4. [Acknowledgement](#acknowledgement)
-5. [Use examples](#examples)
 
 <a name="descripton"></a>
 ## Description
@@ -69,7 +66,7 @@ This project is divided in the following key sections:
 ### Installation
 Clone the repo:
 ```
-git clone 
+git clone https://github.com/gracecarrillo/Disaster_Response_NLP_Pipeline.git
 ```
 <a name="execution"></a>
 ### Executing Program:
