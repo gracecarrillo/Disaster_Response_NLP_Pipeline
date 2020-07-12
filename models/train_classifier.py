@@ -1,35 +1,20 @@
-"""
-Classifier Trainer
-Project: Disaster Response Pipeline (Udacity - Data Science Nanodegree)
+# general
+import numpy as np
+import pandas as pd
+pd.set_option('display.max_columns', 500)
+import sys
+import os
+from sqlalchemy import create_engine # sql db
+import pickle
 
-Sample Script Syntax:
-> python train_classifier.py <path to sqllite  destination db> <path to the pickle file>
-
-Sample Script Execution:
-> python train_classifier.py ../data/disaster_response_db.db classifier.pkl
-
-Arguments:
-    1) Path to SQLite destination database (e.g. disaster_response_db.db)
-    2) Path to pickle file name where ML model needs to be saved (e.g. classifier.pkl)
-"""
-
-# import libraries
+# NLP 
 import nltk
+import re
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger')
 
-# import libraries
-import numpy as np
-import pandas as pd
-pd.set_option('display.max_columns', 500)
-
-import sys
-import os
-import re
-from sqlalchemy import create_engine
-import pickle
-
+# ML modelling
 from scipy.stats import gmean
 # import relevant functions/modules from the sklearn
 from sklearn.pipeline import Pipeline, FeatureUnion
@@ -46,21 +31,27 @@ from sklearn.base import BaseEstimator,TransformerMixin
 
 def load_data_from_db(database_filepath):
     """
-    Load Data from the Database Function
+    Loads data from SQLite database
     
-    Arguments:
-        database_filepath -> Path to SQLite destination database (e.g. disaster_response_db.db)
-    Output:
-        X -> a dataframe containing features
-        Y -> a dataframe containing labels
-        category_names -> List of categories name
+    Parameters
+    ----------
+    database_filepath: 
+        path Path to SQLite destination database (e.g. disaster_response_db.db)
+    Returns
+    -------
+    X: pd.Series
+        a dataframe containing features
+    Y: pd.Series
+        a dataframe containing labels
+    category_names: lst
+        list of categories as strings
     """
     
     engine = create_engine('sqlite:///' + database_filepath)
     table_name = os.path.basename(database_filepath).replace(".db","") + "_table"
     df = pd.read_sql_table(table_name,engine)
     
-    #Remove child alone as it has all zeros only
+    # Remove child alone as it has all zeros only
     df = df.drop(['child_alone'],axis=1)
     
     # Given value 2 in the related field are neglible so it could be error. Replacing 2 with 1 to consider it a valid response.
@@ -70,20 +61,22 @@ def load_data_from_db(database_filepath):
     X = df['message']
     y = df.iloc[:,4:]
     
-    #print(X)
-    #print(y.columns)
-    category_names = y.columns # This will be used for visualization purpose
+    category_names = y.columns 
     return X, y, category_names
 
 
-def tokenize(text,url_place_holder_string="urlplaceholder"):
+def tokenize(text, url_place_holder_string="urlplaceholder"):
     """
     Tokenize the text function
     
-    Arguments:
-        text -> Text message which needs to be tokenized
-    Output:
-        clean_tokens -> List of tokens extracted from the provided text
+    Parameters
+    ----------
+    text: str
+        Text message to be tokenized
+    Returns
+    -------
+    clean_tokens: lst
+        List of tokens extracted from text
     """
     
     # Replace all urls with a urlplaceholder string
@@ -106,7 +99,7 @@ def tokenize(text,url_place_holder_string="urlplaceholder"):
     clean_tokens = [lemmatizer.lemmatize(w).lower().strip() for w in tokens]
     return clean_tokens
 
-# Build a custom transformer which will extract the starting verb of a sentence
+# Custom transformer to extract the starting verb of a sentence
 class StartingVerbExtractor(BaseEstimator, TransformerMixin):
     """
     Starting Verb Extractor class
