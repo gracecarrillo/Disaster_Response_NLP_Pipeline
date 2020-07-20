@@ -7,14 +7,14 @@ import os
 from sqlalchemy import create_engine # sql db
 import pickle
 
-# NLP 
+# NLP Pipeline
 import nltk
 import re
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger')
 
-# ML modelling
+# ML Pipeline
 from scipy.stats import gmean
 # import relevant functions/modules from the sklearn
 from sklearn.pipeline import Pipeline, FeatureUnion
@@ -54,8 +54,7 @@ def load_data_from_db(database_filepath):
     # Remove child alone as it has all zeros only
     df = df.drop(['child_alone'],axis=1)
     
-    # Given value 2 in the related field are neglible so it could be error. Replacing 2 with 1 to consider it a valid response.
-    # Alternatively, we could have assumed it to be 0 also. In the absence of information I have gone with majority class.
+    # Replace 2 with 1 to consider it a valid response.
     df['related']=df['related'].map(lambda x: 1 if x == 2 else x)
     
     X = df['message']
@@ -151,26 +150,24 @@ def build_pipeline():
 
 def multioutput_fscore(y_true,y_pred,beta=1):
     """
-    MultiOutput Fscore
-    
-    This is a performance metric of my own creation.
-    It is a sort of geometric mean of the fbeta_score, computed on each label.
-    
-    It is compatible with multi-label and multi-class problems.
-    It features some peculiarities (geometric mean, 100% removal...) to exclude
-    trivial solutions and deliberatly under-estimate a stangd fbeta_score average.
-    The aim is avoiding issues when dealing with multi-class/multi-label imbalanced cases.
-    
-    It can be used as scorer for GridSearchCV:
+    Geometric mean of the fbeta_score, computed on each label. 
+    Aim is avoiding issues when dealing with imbalanced cases.
+    Can be used as scorer for GridSearchCV:
         scorer = make_scorer(multioutput_fscore,beta=1)
         
-    Arguments:
-        y_true -> List of labels
-        y_prod -> List of predictions
-        beta -> Beta value to be used to calculate fscore metric
+    Parameters
+    ---------
+    y_true: lst
+        List of labels
+    y_prod: lst
+        List of predictions
+    beta: float
+        Beta value to be used to calculate fscore metric
     
-    Output:
-        f1score -> Calculation geometric mean of fscore
+    Returns
+    -------
+    f1score: float
+        Geometric mean of the fscore
     """
     
     # If provided y predictions is a dataframe then extract the values from that
@@ -199,11 +196,16 @@ def evaluate_pipeline(pipeline, X_test, Y_test, category_names):
     
     This function applies a ML pipeline to a test set and prints out the model performance (accuracy and f1score)
     
-    Arguments:
-        pipeline -> A valid scikit ML Pipeline
-        X_test -> Test features
-        Y_test -> Test labels
-        category_names -> label names (multi-output)
+    Parameters
+    ---------
+    pipeline 
+        A valid scikit ML Pipeline
+    X_test
+        Test features
+    Y_test 
+        Test labels
+    category_names
+        label names (multi-output)
     """
     Y_pred = pipeline.predict(X_test)
     
@@ -227,9 +229,12 @@ def save_model_as_pickle(pipeline, pickle_filepath):
     
     This function saves trained model as Pickle file, to be loaded later.
     
-    Arguments:
-        pipeline -> GridSearchCV or Scikit Pipelin object
-        pickle_filepath -> destination path to save .pkl file
+    Parameters
+    ----------
+   pipeline 
+        GridSearchCV or Scikit Pipeline object
+   pickle_filepath
+        destination path to save .pkl file
     
     """
     pickle.dump(pipeline, open(pickle_filepath, 'wb'))
