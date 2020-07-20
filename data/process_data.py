@@ -1,21 +1,3 @@
-"""
-Preprocessing of Data
-Project: Disaster Response Pipeline (Udacity - Data Science Nanodegree)
-
-Sample Script Syntax:
-
-> python process_data.py <path to messages csv file> <path to categories csv file> <path to sqllite  destination db>
-
-Sample Script Execution:
-> python process_data.py disaster_messages.csv disaster_categories.csv disaster_response_db.db
-
-Arguments Description:
-    1) Path to the CSV file containing messages (e.g. disaster_messages.csv)
-    2) Path to the CSV file containing categories (e.g. disaster_categories.csv)
-    3) Path to SQLite destination database (e.g. disaster_response_db.db)
-"""
-
-# Import all the relevant libraries
 import sys
 import numpy as np
 import pandas as pd
@@ -25,11 +7,16 @@ def load_messages_with_categories(messages_filepath, categories_filepath):
     """
     Load Messages Data with Categories Function
     
-    Arguments:
-        messages_filepath -> Path to the CSV file containing messages
-        categories_filepath -> Path to the CSV file containing categories
-    Output:
-        df -> Combined data containing messages and categories
+    Parameters
+    ----------
+    messages_filepath: xpath 
+        Path to the CSV file containing messages
+    categories_filepath: xpath
+        Path to the CSV file containing categories
+    Returns
+    -------
+    df: pandas.DataFrame
+        Combined data containing messages and categories
     """
     
     messages = pd.read_csv(messages_filepath)
@@ -41,16 +28,20 @@ def clean_categories_data(df):
     """
     Clean Categories Data Function
     
-    Arguments:
-        df -> Combined data containing messages and categories
-    Outputs:
-        df -> Combined data containing messages and categories with categories cleaned up
+    Parameters
+    ----------
+    df: pandas.DataFrame
+        Combined data containing messages and categories
+    Returns
+    -------
+    df: pandas.DataFrame
+        Combined data containing messages and categories with categories cleaned up
     """
     
-    # Split the categories
+    # Split categories
     categories = df['categories'].str.split(pat=';',expand=True)
     
-    #Fix the categories columns name
+    #Fix categories columns name
     row = categories.iloc[[1]]
     category_colnames = [category_name.split('-')[0] for category_name in row.values[0]]
     categories.columns = category_colnames
@@ -69,9 +60,12 @@ def save_data_to_db(df, database_filename):
     """
     Save Data to SQLite Database Function
     
-    Arguments:
-        df -> Combined data containing messages and categories with categories cleaned up
-        database_filename -> Path to SQLite destination database
+    Parameters
+    ----------
+    df: pandas.DataFrame
+        Combined data containing messages and categories with categories cleaned up
+    database_filename: sql path
+        Path to SQLite destination database
     """
     
     engine = create_engine('sqlite:///'+ database_filename)
