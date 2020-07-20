@@ -12,7 +12,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
-from sklearn.externals import joblib
+import joblib
 from sqlalchemy import create_engine
 
 
@@ -55,7 +55,7 @@ df = pd.read_sql_table('df', engine)
 model = joblib.load("../models/classifier.pkl")
 
 
-# index webpage displays cool visuals and receives user input text for model
+# index webpage displays visuals and receives user input text for model
 @app.route('/')
 @app.route('/index')
 
@@ -139,7 +139,7 @@ def go():
 
 
 def main():
-    app.run(host='0.0.0.0',threaded=True, port=3001, debug=True)
+    app.run(host='0.0.0.0',threaded=True, port=3001, debug=False)
 
 
 if __name__ == '__main__':
